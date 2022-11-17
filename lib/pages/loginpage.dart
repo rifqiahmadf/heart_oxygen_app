@@ -50,6 +50,11 @@ class LoginPage extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                   onPressed: () {},
                   child: Text(
                     'Lupa Password?',
@@ -60,7 +65,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-             CustomButton(
+            CustomButton(
               text: 'Masuk',
               onPressed: () {
                 Navigator.pushNamed(context, HomePage.nameRoute);

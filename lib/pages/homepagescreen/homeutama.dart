@@ -1,9 +1,63 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../shared/theme.dart';
 
-class HomeUtama extends StatelessWidget {
+class HomeUtama extends StatefulWidget {
   const HomeUtama({super.key});
+
+  @override
+  State<HomeUtama> createState() => _HomeUtamaState();
+}
+
+// Stream<int> dummyData() async* {
+//   for (int i = 0; i <= 5; i++) {
+//     await Future.delayed(const Duration(seconds: 1));
+//     yield i;
+//   }
+// }
+
+class _HomeUtamaState extends State<HomeUtama> {
+  Stream dummyData = Stream.periodic(
+    const Duration(seconds: 1),
+    ((i) {
+      int rand = Random().nextInt(10);
+
+      if (rand > 0 && rand < 2) {
+        int randDouble = Random().nextInt(30);
+        return randDouble + 20;
+      } else if (rand > 9 && rand < 10) {
+        int randDouble = Random().nextInt(30);
+        return randDouble + 80;
+      } else {
+        int randDouble = Random().nextInt(30);
+        return randDouble + 50;
+      }
+    }),
+  );
+  int dummyValue = 0;
+  late StreamSubscription _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _sub = dummyData.listen((event) {
+      setState(() {
+        dummyValue = event;
+      });
+    });
+
+    _sub.resume();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _sub.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +116,7 @@ class HomeUtama extends StatelessWidget {
                     width: 16,
                   ),
                   Text(
-                    '75 DPM',
+                    '$dummyValue DPM',
                     style: cHeader1Style.copyWith(
                       color: cBlackColor,
                     ),
@@ -81,7 +135,7 @@ class HomeUtama extends StatelessWidget {
                     width: 16,
                   ),
                   Text(
-                    '94 %',
+                    '${dummyValue + 3} %',
                     style: cHeader1Style.copyWith(
                       color: cBlackColor,
                     ),
@@ -96,12 +150,22 @@ class HomeUtama extends StatelessWidget {
             height: 26,
           ),
           Text(
-            'Normal',
+            dummyValue < 50
+                ? 'HeartRate Rendah'
+                : dummyValue > 80
+                    ? 'HeartRate Tinggi'
+                    : 'Normal',
             style: cNavBarText.copyWith(
               fontSize: 20,
               color: cPurpleDarkColor,
             ),
           ),
+          /*ElevatedButton(
+            onPressed: () {
+              _sub.pause();
+            },
+            child: const Text('pause'),
+          ),*/
         ],
       ),
     );

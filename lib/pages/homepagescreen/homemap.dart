@@ -5,6 +5,13 @@ class HomeMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Center(
+      child: Image.asset(
+        'assets/images/mapsdummy.png',
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.cover,
+      ),
+    );
   }
 }
