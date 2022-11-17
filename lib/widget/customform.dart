@@ -15,40 +15,53 @@ class CustomForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 43,
-      margin: margin,
-      child: TextFormField(
-        obscureText: isPassword,
-        controller: textController,
-        enableSuggestions: false,
-        autocorrect: false,
-        textAlign: TextAlign.start,
-        textAlignVertical: TextAlignVertical.center,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: cTextButtonBlack,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-              10,
+    return TweenAnimationBuilder(
+      curve: Curves.easeIn,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+      tween: Tween(begin: 0.7, end: 1.0),
+      child: Container(
+        height: 43,
+        margin: margin,
+        child: TextFormField(
+          obscureText: isPassword,
+          controller: textController,
+          enableSuggestions: false,
+          autocorrect: false,
+          textAlign: TextAlign.start,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: cTextButtonBlack,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(
+                10,
+              ),
+              borderSide: const BorderSide(
+                width: 2,
+                color: cPurpleColor,
+              ),
             ),
-            borderSide: const BorderSide(
-              width: 2,
-              color: cPurpleColor,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-              10,
-            ),
-            borderSide: const BorderSide(
-              width: 3,
-              color: cPurpleDarkColor,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(
+                10,
+              ),
+              borderSide: const BorderSide(
+                width: 3,
+                color: cPurpleDarkColor,
+              ),
             ),
           ),
         ),
       ),
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: value,
+          child: child,
+        );
+      },
     );
   }
 }

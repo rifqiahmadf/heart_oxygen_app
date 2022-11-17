@@ -7,12 +7,14 @@ class CustomButton extends StatelessWidget {
   final String text;
   final Color color;
   final EdgeInsets margin;
+  final Function() onPressed;
   const CustomButton({
     this.height = 43,
     this.width = double.infinity,
     this.color = cPurpleColor,
     this.margin = const EdgeInsets.only(top: 14, bottom: 28),
     required this.text,
+    required this.onPressed,
     super.key,
   });
 
@@ -29,7 +31,7 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        onPressed: (() {}),
+        onPressed: (onPressed),
         child: Text(
           text,
           style: cTextButtonWhite,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:heart_oxygen_alarm/pages/homepage.dart';
+import 'package:heart_oxygen_alarm/pages/registerpage.dart';
 import 'package:heart_oxygen_alarm/shared/theme.dart';
 import 'package:heart_oxygen_alarm/widget/custombutton.dart';
 import 'package:heart_oxygen_alarm/widget/customform.dart';
@@ -45,14 +47,25 @@ class LoginPage extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: Text(
-                'Lupa Password?',
-                style: cTextButtonBlack.copyWith(
-                  fontWeight: regular,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Lupa Password?',
+                    style: cTextButtonBlack.copyWith(
+                      fontWeight: regular,
+                    ),
+                  ),
                 ),
               ),
             ),
-            const CustomButton(text: 'Masuk'),
+             CustomButton(
+              text: 'Masuk',
+              onPressed: () {
+                Navigator.pushNamed(context, HomePage.nameRoute);
+              },
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -107,7 +120,14 @@ class LoginPage extends StatelessWidget {
             ),
             Center(
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, RegisterPage.nameRoute);
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
                 child: RichText(
                   text: TextSpan(
                     children: <TextSpan>[

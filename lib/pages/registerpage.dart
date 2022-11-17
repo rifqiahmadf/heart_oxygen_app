@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heart_oxygen_alarm/pages/homepage.dart';
 
 import '../shared/theme.dart';
 import '../widget/custombutton.dart';
@@ -9,6 +10,8 @@ class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,83 +44,45 @@ class RegisterPage extends StatelessWidget {
             CustomForm(
               textController: passwordController,
               hintText: 'Kata Sandi',
+              margin: const EdgeInsets.only(bottom: 15),
+            ),
+            CustomForm(
+              textController: confirmPasswordController,
+              hintText: 'Konfirmasi Kata Sandi',
               margin: const EdgeInsets.only(bottom: 5),
               isPassword: true,
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Lupa Password?',
-                style: cTextButtonBlack.copyWith(
-                  fontWeight: regular,
-                ),
+
+            CustomButton(
+              text: 'Masuk',
+              margin: const EdgeInsets.only(
+                top: 37,
+                bottom: 58,
               ),
+              onPressed: () {
+                Navigator.pushNamed(context, HomePage.nameRoute);
+              },
             ),
-            const CustomButton(text: 'Masuk'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Container(
-                    color: cGreyColor,
-                    height: 1,
-                    margin: const EdgeInsets.only(
-                      right: 10,
-                    ),
-                  ),
-                ),
-                Text(
-                  'Masuk Menggunakan',
-                  style: cTextButtonBlack,
-                ),
-                Expanded(
-                  child: Container(
-                    color: cGreyColor,
-                    height: 1,
-                    margin: const EdgeInsets.only(
-                      left: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 19,
-            ),
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      duration: Duration(milliseconds: 200),
-                      content: Text(
-                        'Coming Soon',
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
-                },
-                child: Image.asset(
-                  'assets/images/logogoogle.png',
-                  height: 22,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
+
             Center(
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
                 child: RichText(
                   text: TextSpan(
                     children: <TextSpan>[
                       TextSpan(
-                        text: "Tidak mempunyai akun?",
+                        text: "Sudah punya akun? Login Disini",
                         style: cTextButtonBlack,
                       ),
                       TextSpan(
-                        text: " Daftar disini",
+                        text: " Login disini",
                         style: cTextButtonBlack.copyWith(fontWeight: bold),
                       ),
                     ],

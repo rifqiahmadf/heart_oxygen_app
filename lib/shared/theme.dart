@@ -9,6 +9,7 @@ const Color cPurpleColor = Color(0xff9287FF);
 const Color cBlackColor = Color(0xff545151);
 const Color cBlackTextFieldColor = Color(0xff3F3D56);
 const Color cPurpleDarkColor = Color(0xff5C40CC);
+const Color cRedColor = Color(0xffD7443E);
 
 FontWeight light = FontWeight.w300;
 FontWeight regular = FontWeight.w400;
@@ -36,4 +37,8 @@ TextStyle cTextButtonWhite = GoogleFonts.poppins(
   fontWeight: bold,
 );
 
-
+TextStyle cNavBarText = GoogleFonts.poppins(
+  color: Color(0xffA4A2A8),
+  fontSize: 18,
+  fontWeight: bold,
+);

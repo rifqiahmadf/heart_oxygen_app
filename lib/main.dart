@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:heart_oxygen_alarm/pages/homepage.dart';
 import 'package:heart_oxygen_alarm/pages/loginpage.dart';
 import 'package:heart_oxygen_alarm/pages/registerpage.dart';
 
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         LoginPage.nameRoute: (context) => LoginPage(),
-        LoginPage.nameRoute: (context) => RegisterPage(),
+        RegisterPage.nameRoute: (context) => RegisterPage(),
+        HomePage.nameRoute: (context) => HomePage(),
       },
     );
   }
