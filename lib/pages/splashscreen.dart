@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:heart_oxygen_alarm/pages/homepage.dart';
 import 'package:heart_oxygen_alarm/pages/loginpage.dart';
 import 'package:heart_oxygen_alarm/shared/theme.dart';
 
@@ -14,9 +16,15 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(Duration(seconds: 2), () {
-      Navigator.pushNamedAndRemoveUntil(
-          context, LoginPage.nameRoute, (route) => false);
+    User? user = FirebaseAuth.instance.currentUser;
+    Timer(Duration(seconds: 1), () {
+      if (user == null) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, LoginPage.nameRoute, (route) => false);
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+            context, HomePage.nameRoute, (route) => false);
+      }
     });
     super.initState();
   }

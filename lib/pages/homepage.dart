@@ -9,6 +9,8 @@ import 'package:heart_oxygen_alarm/pages/loginpage.dart';
 import 'package:heart_oxygen_alarm/shared/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../cubit/auth/auth_cubit.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -46,18 +48,37 @@ class HomePage extends StatelessWidget {
           SafeArea(
             child: Align(
               alignment: Alignment.topRight,
-              child: IconButton(
-                onPressed: () {
-                  print('masuk');
-                  Navigator.pushNamed(
-                    context,
-                    LoginPage.nameRoute,
+              child: BlocConsumer<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is AuthFailed) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.error),
+                        backgroundColor: cRedColor,
+                      ),
+                    );
+                  } else if (state is AuthInitial) {
+                    context.read<BottompageCubit>().setPage(1);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, LoginPage.nameRoute, (route) => false);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is AuthLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  return IconButton(
+                    onPressed: () {
+                      print('masuk');
+                      context.read<AuthCubit>().signOut();
+                    },
+                    icon: const Icon(
+                      Icons.logout_outlined,
+                      color: cPurpleColor,
+                    ),
                   );
                 },
-                icon: const Icon(
-                  Icons.logout_outlined,
-                  color: cPurpleColor,
-                ),
               ),
             ),
           ),

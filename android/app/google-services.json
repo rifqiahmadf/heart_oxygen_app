@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "476700494346",
+    "project_id": "heartandoxygenalarm",
+    "storage_bucket": "heartandoxygenalarm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476700494346:android:816b251377871b373fadf3",
+        "android_client_info": {
+          "package_name": "com.fakhriyusrizal.heart_oxygen_alarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476700494346-ied8dn6rs7fu707bhsp1v40a37rkl7r2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fakhriyusrizal.heart_oxygen_alarm",
+            "certificate_hash": "9329d2c998f7e1f3910e94b8bfb1770021af36f2"
+          }
+        },
+        {
+          "client_id": "476700494346-tm5aree331foib8a9kn5fr17qs83kb7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUGKGBu3Fr-jC5LD0AjIC64UZpogO-PzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476700494346-tm5aree331foib8a9kn5fr17qs83kb7v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "476700494346-itdeceliinrno3hc4vulhum10phdlgga.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fakhriyusrizal.heartOxygenAlarm"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

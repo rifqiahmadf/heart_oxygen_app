@@ -1,13 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:heart_oxygen_alarm/cubit/auth/auth_cubit.dart';
 import 'package:heart_oxygen_alarm/cubit/bottompage/bottompage_cubit.dart';
 import 'package:heart_oxygen_alarm/pages/homepage.dart';
 import 'package:heart_oxygen_alarm/pages/loginpage.dart';
 import 'package:heart_oxygen_alarm/pages/registerpage.dart';
 import 'package:heart_oxygen_alarm/pages/splashscreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -21,6 +25,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => BottompageCubit(),
+        ),
+        BlocProvider(
+          create: (context) => AuthCubit(),
         ),
       ],
       child: MaterialApp(
