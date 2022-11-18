@@ -105,11 +105,64 @@ class RegisterPage extends StatelessWidget {
                         bottom: 30,
                       ),
                       onPressed: () {
-                        context.read<AuthCubit>().signUp(
-                              username: usernameController.text,
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
+                        if (usernameController.text == '' ||
+                            emailController.text == '' ||
+                            passwordController.text == '' ||
+                            confirmPasswordController.text == '') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: cRedColor,
+                              duration: Duration(milliseconds: 200),
+                              content: Text(
+                                'Pastikan Form Tidak Kosong',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else if (!RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(emailController.text)) {
+                          //NOTE:EMAIL VALIDATION menggunakan RegExp
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: cRedColor,
+                              duration: Duration(milliseconds: 200),
+                              content: Text(
+                                'Cek Penulisan Email Anda',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else if (passwordController.text.length < 8) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: cRedColor,
+                              duration: Duration(milliseconds: 200),
+                              content: Text(
+                                'Password Minimal 8 Karakter',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else if (passwordController.text !=
+                            confirmPasswordController.text) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: cRedColor,
+                              duration: Duration(milliseconds: 200),
+                              content: Text(
+                                'Konfirmasi Password Tidak Sesuai',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else {
+                          context.read<AuthCubit>().signUp(
+                                username: usernameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                        }
                       },
                     );
                   },

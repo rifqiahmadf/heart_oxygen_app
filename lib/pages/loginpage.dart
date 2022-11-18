@@ -65,7 +65,17 @@ class LoginPage extends StatelessWidget {
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            duration: Duration(milliseconds: 200),
+                            content: Text(
+                              'Coming Soon',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      },
                       child: Text(
                         'Lupa Password?',
                         style: cTextButtonBlack.copyWith(
@@ -107,9 +117,48 @@ class LoginPage extends StatelessWidget {
                     return CustomButton(
                       text: 'Masuk',
                       onPressed: () {
-                        context.read<AuthCubit>().signIn(
-                            email: emailController.text,
-                            password: passwordController.text);
+                        if (emailController.text == '' ||
+                            passwordController.text == '') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: cRedColor,
+                              duration: Duration(milliseconds: 200),
+                              content: Text(
+                                'Pastikan Form Tidak Kosong',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else if (!RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(emailController.text)) {
+                          //NOTE:EMAIL VALIDATION menggunakan RegExp
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: cRedColor,
+                              duration: Duration(milliseconds: 200),
+                              content: Text(
+                                'Cek Penulisan Email Anda',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else if (passwordController.text.length < 8) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: cRedColor,
+                              duration: Duration(milliseconds: 200),
+                              content: Text(
+                                'Password Minimal 8 Karakter',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else {
+                          context.read<AuthCubit>().signIn(
+                              email: emailController.text,
+                              password: passwordController.text);
+                        }
                       },
                     );
                   },

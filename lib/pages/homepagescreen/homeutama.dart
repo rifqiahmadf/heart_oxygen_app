@@ -37,7 +37,7 @@ class _HomeUtamaState extends State<HomeUtama> {
       }
     }),
   );
-  int dummyValue = 0;
+  int dummyValue = Random().nextInt(50) + 30;
   late StreamSubscription _sub;
 
   @override
@@ -135,7 +135,7 @@ class _HomeUtamaState extends State<HomeUtama> {
                     width: 16,
                   ),
                   Text(
-                    '${dummyValue + 3} %',
+                    '${dummyValue + Random().nextInt(7)} %',
                     style: cHeader1Style.copyWith(
                       color: cBlackColor,
                     ),
