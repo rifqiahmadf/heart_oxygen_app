@@ -65,12 +65,12 @@ class HomePage extends StatelessWidget {
                 },
                 builder: (context, state) {
                   if (state is AuthLoading) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: const CircularProgressIndicator());
                   }
 
                   return IconButton(
                     onPressed: () {
-                      print('masuk');
+                      
                       context.read<AuthCubit>().signOut();
                     },
                     icon: const Icon(

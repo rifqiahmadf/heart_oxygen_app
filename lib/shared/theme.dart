@@ -42,3 +42,9 @@ TextStyle cNavBarText = GoogleFonts.poppins(
   fontSize: 18,
   fontWeight: bold,
 );
+
+TextStyle cTextPurpleMaps = GoogleFonts.poppins(
+  color: cPurpleColor,
+  fontSize: 14,
+  fontWeight: bold,
+);
