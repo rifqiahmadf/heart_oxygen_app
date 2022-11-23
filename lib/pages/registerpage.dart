@@ -21,12 +21,12 @@ class RegisterPage extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 35,
-          vertical: 62,
-        ),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 35,
+            vertical: 62,
+          ),
           child: SizedBox(
             height: h,
             child: Column(

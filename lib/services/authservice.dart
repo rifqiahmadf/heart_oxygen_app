@@ -4,16 +4,10 @@ import 'package:heart_oxygen_alarm/services/userservice.dart';
 import '../model/usermodel.dart';
 
 class AuthService {
-  // * Authservice untuk mengatur autentikasi, sedangkan UserService untuk mengatur penyimpanan data ke firebase
+  //* Authservice untuk mengatur autentikasi, sedangkan UserService untuk mengatur penyimpanan data ke firebase
 
   //! NOTE: Langkah 7:
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  /*Stream<User?> streamAuthStatus() {
-    return _auth.authStateChanges();
-  }*/
-
-  /*Stream<User?> get streamAuthStatus => _auth.authstate*/
 
   //! NOTE: Langkah 8:
   Future<UserModel> signUp({

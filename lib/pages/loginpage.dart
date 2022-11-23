@@ -18,12 +18,12 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 35,
-          vertical: 62,
-        ),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 35,
+            vertical: 62,
+          ),
           child: SizedBox(
             height: h,
             child: Column(
@@ -38,6 +38,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 Image.asset('assets/images/runheader.png'),
                 // const Spacer(),
+                const
                 SizedBox(
                   height: 40,
                 ),
