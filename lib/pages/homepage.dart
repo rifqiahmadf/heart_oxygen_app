@@ -110,7 +110,7 @@ class HomePage extends StatelessWidget {
                           horizontal: 50, vertical: 15),
                       width: double.infinity,
                       color: state == 1
-                          ? Color(0xffF4F3FF).withOpacity(0.2)
+                          ? Color(0xffF4F3FF).withOpacity(0.8)
                           : Color(0xffF4F3FF),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

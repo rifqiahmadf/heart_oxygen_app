@@ -44,9 +44,11 @@ class _HomeUtamaState extends State<HomeUtama> {
   void initState() {
     super.initState();
     _sub = dummyData.listen((event) {
-      setState(() {
-        dummyValue = event;
-      });
+      if (mounted) {
+        setState(() {
+          dummyValue = event;
+        });
+      }
     });
 
     _sub.resume();
