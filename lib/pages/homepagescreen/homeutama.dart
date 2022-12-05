@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/gen/flutterblueplus.pbserver.dart';
 
 import '../../shared/theme.dart';
 
 class HomeUtama extends StatefulWidget {
-  const HomeUtama({super.key});
+  const HomeUtama({required this.nama, required this.id, super.key});
+  final String nama;
+  final String id;
 
   @override
   State<HomeUtama> createState() => _HomeUtamaState();
@@ -20,7 +23,7 @@ class HomeUtama extends StatefulWidget {
 // }
 
 class _HomeUtamaState extends State<HomeUtama> {
-  Stream dummyData = Stream.periodic(
+  /*Stream dummyData = Stream.periodic(
     const Duration(seconds: 1),
     ((i) {
       int rand = Random().nextInt(10);
@@ -36,11 +39,11 @@ class _HomeUtamaState extends State<HomeUtama> {
         return randDouble + 50;
       }
     }),
-  );
+  );*/
   int dummyValue = Random().nextInt(50) + 30;
-  late StreamSubscription _sub;
+  // late StreamSubscription _sub;
 
-  @override
+  /* @override
   void initState() {
     super.initState();
     _sub = dummyData.listen((event) {
@@ -52,12 +55,11 @@ class _HomeUtamaState extends State<HomeUtama> {
     });
 
     _sub.resume();
-  }
+  }*/
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _sub.cancel();
+    // _sub.cancel();
     super.dispose();
   }
 
@@ -68,6 +70,20 @@ class _HomeUtamaState extends State<HomeUtama> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(
+            'Connected to ${widget.nama}',
+            style: cNavBarText.copyWith(
+              fontSize: 10,
+              color: cPurpleDarkColor,
+            ),
+          ),
+          Text(
+            '${widget.id}',
+            style: cNavBarText.copyWith(
+              fontSize: 10,
+              color: cPurpleDarkColor,
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

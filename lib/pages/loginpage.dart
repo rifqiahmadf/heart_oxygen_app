@@ -92,7 +92,7 @@ class LoginPage extends StatelessWidget {
                   listener: (context, state) {
                     if (state is AuthSuccess) {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, HomePage.nameRoute, (route) => false);
+                          context, FindDevicesScreen.nameRoute, (route) => false);
                     } else if (state is AuthFailed) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         duration: const Duration(

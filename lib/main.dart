@@ -50,7 +50,8 @@ class MyApp extends StatelessWidget {
           '/': (context) => const SplashScreen(),
           LoginPage.nameRoute: (context) => LoginPage(),
           RegisterPage.nameRoute: (context) => RegisterPage(),
-          HomePage.nameRoute: (context) => HomePage(),
+          // HomePage.nameRoute: (context) => HomePage(),
+          FindDevicesScreen.nameRoute: (context) => FindDevicesScreen(),
         },
       ),
     );
