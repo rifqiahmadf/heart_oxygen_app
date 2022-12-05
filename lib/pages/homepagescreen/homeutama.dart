@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/gen/flutterblueplus.pbserver.dart';
 // import 'package:flutter_blue_plus/gen/flutterblueplus.pbserver.dart';
 
 import '../../shared/theme.dart';
@@ -15,7 +16,8 @@ class HomeUtama extends StatefulWidget {
   final String nama;
   final String id;
   // final List<BluetoothService> services;
-  final Stream<List<int>>? listStream;
+  // final Stream<List<int>>? listStream;
+  final String listStream;
 
   @override
   State<HomeUtama> createState() => _HomeUtamaState();
@@ -140,7 +142,7 @@ class _HomeUtamaState extends State<HomeUtama> {
                   const SizedBox(
                     width: 16,
                   ),
-                  StreamBuilder<List<int>>(
+                  /*StreamBuilder<List<int>>(
                     stream:
                         widget.listStream, //here we're using our char's value
                     initialData: [],
@@ -160,6 +162,12 @@ class _HomeUtamaState extends State<HomeUtama> {
                         return SizedBox();
                       }
                     },
+                  ),*/
+                  Text(
+                    '${widget.listStream} DPM',
+                    style: cHeader1Style.copyWith(
+                      color: cBlackColor,
+                    ),
                   ),
                   /*Text(
                     '$dummyValue DPM',

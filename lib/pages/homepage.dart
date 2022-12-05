@@ -29,6 +29,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Stream<List<int>>? listStream;
+  BluetoothCharacteristic? c;
 
   // late BluetoothCharacteristic c;
 
@@ -37,27 +38,41 @@ class _HomePageState extends State<HomePage> {
         await widget.bluetoothDevice.discoverServices();
     //checking each services provided by device
     print('masuk discover 1');
-    services.forEach((service) {
-      if (service.uuid.toString().toUpperCase().substring(4, 8) == 'FD92') {
-        print('masuk discover 2 : ${service.uuid.toString()}');
-        service.characteristics.forEach((characteristic) async {
-          if (characteristic.uuid.toString().toUpperCase().substring(4, 8) ==
-              'EB22') {
-            print('masuk discover 3 : ${characteristic.uuid.toString()}');
-            //Updating characteristic to perform write operation.
-            // c = characteristic;
+    services.forEach(
+      (service) {
+        if (service.uuid.toString().toUpperCase().substring(4, 8) == 'FD92') {
+          print('masuk discover 2 : ${service.uuid.toString()}');
+          service.characteristics.forEach(
+            (characteristic) async {
+              if (characteristic.uuid
+                      .toString()
+                      .toUpperCase()
+                      .substring(4, 8) ==
+                  'EB22') {
+                print('masuk discover 3 : ${characteristic.uuid.toString()}');
+                //Updating characteristic to perform write operation.
+                // c = characteristic;
 
-            await characteristic.setNotifyValue(!characteristic.isNotifying);
-            await characteristic.read();
-            setState(() {
-              listStream = characteristic.value;
-            });
+                await characteristic
+                    .setNotifyValue(!characteristic.isNotifying);
+                await characteristic.read();
+                setState(() {
+                  listStream = characteristic.value.asBroadcastStream();
+                  c = characteristic;
+                });
 
-            // characteristic.read();
-          }
-        });
-      }
-    });
+                // characteristic.read();
+              }
+            },
+          );
+        }
+      },
+    );
+  }
+
+  readAgain() async {
+    await c!.setNotifyValue(!c!.isNotifying);
+    await c!.read();
   }
 
   @override
@@ -87,24 +102,36 @@ class _HomePageState extends State<HomePage> {
       event.map((e) => print('hasil = ${e.uuid}'));
     });*/*/
     var bloc = context.read<BottompageCubit>();
-    print('hasil masuk');
-    Widget contentPage(int index) {
+
+    Widget contentPage(int index, String heartRate) {
       switch (index) {
         case 1:
           return const HomeMap();
         case 2:
+          /*return StreamBuilder(
+            stream: listStream,
+            initialData: [],
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              return HomeUtama(
+                nama: widget.bluetoothDevice.name,
+                id: widget.bluetoothDevice.id.toString(),
+                listStream: snapshot.data,
+              );
+            },
+          );*/
           return HomeUtama(
             nama: widget.bluetoothDevice.name,
             id: widget.bluetoothDevice.id.toString(),
-            listStream: listStream,
+            listStream: heartRate,
           );
+
         case 3:
           return const HomeSolusi();
         default:
           return HomeUtama(
             nama: widget.bluetoothDevice.name,
             id: widget.bluetoothDevice.id.toString(),
-            listStream: listStream,
+            listStream: heartRate,
           );
       }
     }
@@ -223,7 +250,15 @@ class _HomePageState extends State<HomePage> {
                 //
                 BlocBuilder<BottompageCubit, int>(
                   builder: (context, state) {
-                    return contentPage(state);
+                    return StreamBuilder<List<int>>(
+                      stream: listStream,
+                      initialData: [],
+                      builder: (context, snapshot) {
+                        return snapshot.data!.length < 2
+                            ? contentPage(state, 'loading')
+                            : contentPage(state, snapshot.data![1].toString());
+                      },
+                    );
                   },
                 ),
 
