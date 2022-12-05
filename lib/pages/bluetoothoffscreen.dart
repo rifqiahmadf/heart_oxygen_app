@@ -13,7 +13,7 @@ class BluetoothOffScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: cPurpleColor,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -25,14 +25,21 @@ class BluetoothOffScreen extends StatelessWidget {
             ),
             //! Bluetooth : 4.1 kalau state tidak null, tampilkan state.toString (off), kalau bluetooth null atau tidak tersedia tampilkan not Available
             Text(
-              'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
+              'Bluetoothnya ${state != null ? state.toString().substring(15) : 'not available'}, tolong dinyalakan.',
               style: Theme.of(context)
                   .primaryTextTheme
                   .subtitle2
                   ?.copyWith(color: Colors.white),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             //! Bluetooth : 4.2 tombol untuk menyalakan bluetooth kalau bluetooth off
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: cPurpleDarkColor,
+                shape: const StadiumBorder(),
+              ),
               onPressed: Platform.isAndroid
                   ? () => FlutterBluePlus.instance.turnOn()
                   : null,

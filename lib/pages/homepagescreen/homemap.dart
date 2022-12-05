@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,8 +22,17 @@ class _HomeMapState extends State<HomeMap> {
   Position? _position;
   //! Google Maps 2 : bikin variabel initial position, mapController, dan marker
   LatLng currentLocation = const LatLng(-6.202448, 106.769376);
-  late GoogleMapController _mapController;
+  //! Completer 1 : membuat nilai completer yang mereturn nilai future
+  final Completer<GoogleMapController> _completer = Completer();
   final Map<String, Marker> _markers = {};
+
+  Future<void> animateTo(double lat, double lng) async {
+    //! Completer 2 : completernya di await
+    final c = await _completer.future;
+    final p = CameraPosition(target: LatLng(lat, lng), zoom: 14.4746);
+    //! Completer 3 : nilai return dari completernya mau diapain?
+    c.animateCamera(CameraUpdate.newCameraPosition(p));
+  }
 
   //! Google Maps 5 : bikin method addMarker
   _addMarker(String id, LatLng location) async {
@@ -100,13 +111,19 @@ class _HomeMapState extends State<HomeMap> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     //! GeoLocator 4 : panggil method getLocation di initState
-    _getCurrentLocation().then((_) {
-      context.read<MapCubit>().getLocationApi(
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=rumah%20sakit&location=${_position!.latitude},${_position!.longitude}&radius=1500&type=rumah%20sakit&key=AIzaSyCyw7pp0GDBgTfaf3cSGf9XqA3PQG4Fl_4');
-    });
+    if (mounted) {
+      _getCurrentLocation().then((_) {
+        context.read<MapCubit>().getLocationApi(
+            'https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=rumah%20sakit&location=${_position!.latitude},${_position!.longitude}&radius=1500&type=rumah%20sakit&key=AIzaSyCyw7pp0GDBgTfaf3cSGf9XqA3PQG4Fl_4');
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -127,7 +144,8 @@ class _HomeMapState extends State<HomeMap> {
                         zoom: 14,
                       ),
                       onMapCreated: (controller) {
-                        _mapController = controller;
+                        // _mapController = controller;
+                        _completer.complete(controller);
                         //! Google Maps 6 : tambahkan method addMaker ke dalam onMapCreated
                         _addMarker(
                           'id1',
@@ -170,13 +188,10 @@ class _HomeMapState extends State<HomeMap> {
                                 alignment: Alignment.topCenter,
                                 child: InkWell(
                                   onTap: () {
-                                    _mapController.animateCamera(
-                                      CameraUpdate.newLatLng(
-                                        LatLng(
-                                          state.marker[index].latitude,
-                                          state.marker[index].longitude,
-                                        ),
-                                      ),
+                                    //! Completer 4 : baru deh dipanggil dalam build()
+                                    animateTo(
+                                      state.marker[index].latitude,
+                                      state.marker[index].longitude,
                                     );
                                   },
                                   child: Container(
@@ -248,7 +263,7 @@ class _HomeMapState extends State<HomeMap> {
                         ),
                       );
                     }
-                    return Center(child: const CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
               ),

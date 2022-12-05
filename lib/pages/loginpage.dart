@@ -11,8 +11,10 @@ import '../cubit/auth/auth_cubit.dart';
 class LoginPage extends StatelessWidget {
   static const nameRoute = '/loginpage';
   LoginPage({super.key});
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController =
+      TextEditingController(text: 'usertest3@gmail.com');
+  final TextEditingController passwordController =
+      TextEditingController(text: 'usertest3');
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +40,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 Image.asset('assets/images/runheader.png'),
                 // const Spacer(),
-                const
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 //
