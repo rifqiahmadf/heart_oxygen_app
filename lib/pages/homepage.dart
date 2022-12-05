@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 import 'dart:ui';
 import 'dart:async';
 import 'dart:math';
@@ -17,30 +17,94 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/auth/auth_cubit.dart';
 import '../widget/bluetoothwidget.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({required this.bluetoothDevice, super.key});
+class HomePage extends StatefulWidget {
+  HomePage({required this.bluetoothDevice, super.key});
   final BluetoothDevice bluetoothDevice;
 
   static const nameRoute = '/homePage';
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Stream<List<int>>? listStream;
+
+  // late BluetoothCharacteristic c;
+
+  discoverServices() async {
+    List<BluetoothService> services =
+        await widget.bluetoothDevice.discoverServices();
+    //checking each services provided by device
+    print('masuk discover 1');
+    services.forEach((service) {
+      if (service.uuid.toString().toUpperCase().substring(4, 8) == 'FD92') {
+        print('masuk discover 2 : ${service.uuid.toString()}');
+        service.characteristics.forEach((characteristic) async {
+          if (characteristic.uuid.toString().toUpperCase().substring(4, 8) ==
+              'EB22') {
+            print('masuk discover 3 : ${characteristic.uuid.toString()}');
+            //Updating characteristic to perform write operation.
+            // c = characteristic;
+
+            await characteristic.setNotifyValue(!characteristic.isNotifying);
+            await characteristic.read();
+            setState(() {
+              listStream = characteristic.value;
+            });
+
+            // characteristic.read();
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    discoverServices();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    /*listStream.listen((event) {
+      print('hasil new = ${event.toString()}');
+    });*/
+    /*print('hasil 1 = ${widget.bluetoothDevice.id}');
+    widget.bluetoothDevice.discoverServices();
+
+    widget.bluetoothDevice.services.listen((event) {
+      print('hasil 2 = ${event.length}');
+      // print(event[5]);
+    });
+    /*bluetoothDevice.services.asyncMap((event) {
+      print('hasil 2 = $event');
+    });*/
+    /*bluetoothDevice.services.listen((event) {
+      event.map((e) => print('hasil = ${e.uuid}'));
+    });*/*/
     var bloc = context.read<BottompageCubit>();
+    print('hasil masuk');
     Widget contentPage(int index) {
       switch (index) {
         case 1:
           return const HomeMap();
         case 2:
           return HomeUtama(
-            nama: bluetoothDevice.name,
-            id: bluetoothDevice.id.toString(),
+            nama: widget.bluetoothDevice.name,
+            id: widget.bluetoothDevice.id.toString(),
+            listStream: listStream,
           );
         case 3:
           return const HomeSolusi();
         default:
           return HomeUtama(
-            nama: bluetoothDevice.name,
-            id: bluetoothDevice.id.toString(),
+            nama: widget.bluetoothDevice.name,
+            id: widget.bluetoothDevice.id.toString(),
+            listStream: listStream,
           );
       }
     }
@@ -54,7 +118,8 @@ class HomePage extends StatelessWidget {
       return cNavBarText;
     }
 
-    print('namanya${bluetoothDevice.name} : ${bluetoothDevice.id}');
+    print(
+        'namanya${widget.bluetoothDevice.name} : ${widget.bluetoothDevice.id}');
     return StreamBuilder<BluetoothState>(
       stream: FlutterBluePlus.instance.state,
       initialData: BluetoothState.unknown,
@@ -114,7 +179,7 @@ class HomePage extends StatelessWidget {
                         ));
                       },
                       icon: StreamBuilder(
-                        stream: bluetoothDevice.state,
+                        stream: widget.bluetoothDevice.state,
                         initialData: BluetoothDeviceState.connecting,
                         builder:
                             (BuildContext context, AsyncSnapshot snapshot) {
@@ -132,6 +197,27 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                /*SafeArea(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: StreamBuilder<List<int>>(
+                      stream: listStream, //here we're using our char's value
+                      initialData: [],
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<int>> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.active) {
+                              //In this method we'll interpret received data
+                              // interpretReceivedData(currentValue);
+
+                          return Text(snapshot.data.toString());
+                        } else {
+                          return SizedBox();
+                        }
+                      },
+                    ),
+                  ),
+                ),*/
 
                 //
                 //

@@ -2,14 +2,20 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/gen/flutterblueplus.pbserver.dart';
+// import 'package:flutter_blue_plus/gen/flutterblueplus.pbserver.dart';
 
 import '../../shared/theme.dart';
 
 class HomeUtama extends StatefulWidget {
-  const HomeUtama({required this.nama, required this.id, super.key});
+  const HomeUtama(
+      {required this.nama,
+      required this.id,
+      required this.listStream,
+      super.key});
   final String nama;
   final String id;
+  // final List<BluetoothService> services;
+  final Stream<List<int>>? listStream;
 
   @override
   State<HomeUtama> createState() => _HomeUtamaState();
@@ -60,6 +66,7 @@ class _HomeUtamaState extends State<HomeUtama> {
   @override
   void dispose() {
     // _sub.cancel();
+
     super.dispose();
   }
 
@@ -133,12 +140,33 @@ class _HomeUtamaState extends State<HomeUtama> {
                   const SizedBox(
                     width: 16,
                   ),
-                  Text(
+                  StreamBuilder<List<int>>(
+                    stream:
+                        widget.listStream, //here we're using our char's value
+                    initialData: [],
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<int>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        //In this method we'll interpret received data
+                        // interpretReceivedData(currentValue);
+
+                        return Text(
+                          snapshot.data.toString() + ' DPM',
+                          style: cHeader1Style.copyWith(
+                            color: cBlackColor,
+                          ),
+                        );
+                      } else {
+                        return SizedBox();
+                      }
+                    },
+                  ),
+                  /*Text(
                     '$dummyValue DPM',
                     style: cHeader1Style.copyWith(
                       color: cBlackColor,
                     ),
-                  ),
+                  ),*/
                 ],
               ),
               Row(
