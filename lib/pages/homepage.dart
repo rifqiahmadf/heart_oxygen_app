@@ -41,6 +41,7 @@ class HomePage extends StatelessWidget {
       return cNavBarText;
     }
 
+    
     return Scaffold(
       body: Stack(
         children: [
@@ -65,12 +66,12 @@ class HomePage extends StatelessWidget {
                 },
                 builder: (context, state) {
                   if (state is AuthLoading) {
-                    return Center(child: const CircularProgressIndicator());
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
-
                   return IconButton(
                     onPressed: () {
-                      
                       context.read<AuthCubit>().signOut();
                     },
                     icon: const Icon(
@@ -82,6 +83,21 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                onPressed: () {
+                  context.read<AuthCubit>().signOut();
+                },
+                icon: const Icon(
+                  Icons.bluetooth_disabled,
+                  color: cPurpleColor,
+                ),
+              ),
+            ),
+          ),
+
           //
           //
           BlocBuilder<BottompageCubit, int>(
@@ -149,7 +165,8 @@ class HomePage extends StatelessWidget {
                 ),
               );
             },
-          )
+          ),
+
         ],
       ),
     );
