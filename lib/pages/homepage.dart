@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     print('masuk discover 1');
     services.forEach(
       (service) {
-        if (service.uuid.toString().toUpperCase().substring(4, 8) == 'FD92') {
+        if (service.uuid.toString().toUpperCase().substring(4, 8) == '180D') {
           print('masuk discover 2 : ${service.uuid.toString()}');
           service.characteristics.forEach(
             (characteristic) async {
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                       .toString()
                       .toUpperCase()
                       .substring(4, 8) ==
-                  'EB22') {
+                  '2A37') {
                 print('masuk discover 3 : ${characteristic.uuid.toString()}');
                 //Updating characteristic to perform write operation.
                 // c = characteristic;
