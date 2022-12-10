@@ -17,22 +17,22 @@ class AuthService {
   }) async {
     try {
       //! NOTE: Langkah 9:
-      UserCredential _userCreate = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCreate = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       //! NOTE: Langkah 10:
-      UserModel _userData = UserModel(
-        id: _userCreate.user!.uid,
+      UserModel userData = UserModel(
+        id: userCreate.user!.uid,
         username: username,
         email: email,
       );
 
       //! NOTE: Langkah 11:
-      UserService().setUser(_userData);
+      UserService().setUser(userData);
 
-      return _userData;
+      return userData;
     } catch (e) {
       rethrow;
     }

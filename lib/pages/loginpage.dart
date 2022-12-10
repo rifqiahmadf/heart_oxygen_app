@@ -232,11 +232,11 @@ class LoginPage extends StatelessWidget {
                       text: TextSpan(
                         children: <TextSpan>[
                           TextSpan(
-                            text: "Tidak mempunyai akun?",
+                            text: 'Tidak mempunyai akun?',
                             style: cTextButtonBlack,
                           ),
                           TextSpan(
-                            text: " Daftar disini",
+                            text: ' Daftar disini',
                             style: cTextButtonBlack.copyWith(fontWeight: bold),
                           ),
                         ],

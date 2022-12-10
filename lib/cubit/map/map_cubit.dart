@@ -1,4 +1,4 @@
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +22,8 @@ class MapCubit extends Cubit<MapState> {
 
         var result = dataRespon['results'] as List;
 
-        result.forEach((element) {
+        for (var element in result
+        ) {
           markerModel.add(
             MarkerModel(
               id: element['place_id'],
@@ -32,7 +33,20 @@ class MapCubit extends Cubit<MapState> {
               alamat: element['vicinity'],
             ),
           );
-        });
+        }
+
+        //? opsi lain for in, tapi tidak disarankan karena akan mentrigger problem
+        /*result.forEach((element) {
+          markerModel.add(
+            MarkerModel(
+              id: element['place_id'],
+              name: element['name'],
+              latitude: element['geometry']['location']['lat'],
+              longitude: element['geometry']['location']['lng'],
+              alamat: element['vicinity'],
+            ),
+          );
+        });*/
 
         emit(MapSuccess(markerModel));
       }

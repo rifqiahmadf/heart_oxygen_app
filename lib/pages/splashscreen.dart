@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     User? user = FirebaseAuth.instance.currentUser;
-    Timer(Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 1), () {
       if (user == null) {
         Navigator.pushNamedAndRemoveUntil(
             context, LoginPage.nameRoute, (route) => false);
@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/logounikom.png"),
+                      image: AssetImage('assets/images/logounikom.png'),
                     ),
                   ),
                 ),
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     horizontal: 100,
                   ),
                   child: Text(
-                    "APLIKASI MONITORING KADAR OKSIGEN DARAH BERBASIS ANDROID MAMANFAATKAN TEKNOLOGI SMARTBAND",
+                    'APLIKASI MONITORING KADAR OKSIGEN DARAH BERBASIS ANDROID MAMANFAATKAN TEKNOLOGI SMARTBAND',
                     style: cNavBarText.copyWith(color: cWhiteColor),
                     textAlign: TextAlign.center,
                   ),
@@ -72,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     horizontal: 100,
                   ),
                   child: Text(
-                    "Fakhri Yusrizal Hidayat",
+                    'Fakhri Yusrizal Hidayat',
                     style: cTextButtonWhite.copyWith(color: cWhiteColor),
                     textAlign: TextAlign.center,
                   ),

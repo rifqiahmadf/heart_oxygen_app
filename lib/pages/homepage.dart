@@ -18,7 +18,7 @@ import '../cubit/auth/auth_cubit.dart';
 import '../widget/bluetoothwidget.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({required this.bluetoothDevice, super.key});
+  const HomePage({required this.bluetoothDevice, super.key});
   final BluetoothDevice bluetoothDevice;
 
   static const nameRoute = '/homePage';
@@ -30,6 +30,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Stream<List<int>>? listStream;
   BluetoothCharacteristic? c;
+  int debugAngka = 0;
+  bool isCorrect = false;
 
   // late BluetoothCharacteristic c;
 
@@ -38,17 +40,18 @@ class _HomePageState extends State<HomePage> {
         await widget.bluetoothDevice.discoverServices();
     //checking each services provided by device
     print('masuk discover 1');
-    services.forEach(
-      (service) {
-        if (service.uuid.toString().toUpperCase().substring(4, 8) == '180D') {
+    for (var service in services) {
+      if (service.uuid.toString().toUpperCase().substring(4, 8) == '180D') {
+          //FD92
           print('masuk discover 2 : ${service.uuid.toString()}');
-          service.characteristics.forEach(
-            (characteristic) async {
-              if (characteristic.uuid
+          for (var characteristic in service.characteristics) {
+            if (characteristic.uuid
                       .toString()
                       .toUpperCase()
                       .substring(4, 8) ==
                   '2A37') {
+                //EB22
+                isCorrect = true;
                 print('masuk discover 3 : ${characteristic.uuid.toString()}');
                 //Updating characteristic to perform write operation.
                 // c = characteristic;
@@ -63,11 +66,11 @@ class _HomePageState extends State<HomePage> {
 
                 // characteristic.read();
               }
-            },
-          );
+            
+          }
         }
-      },
-    );
+      
+    }
   }
 
   readAgain() async {
@@ -77,7 +80,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     discoverServices();
@@ -103,7 +105,7 @@ class _HomePageState extends State<HomePage> {
     });*/*/
     var bloc = context.read<BottompageCubit>();
 
-    Widget contentPage(int index, String heartRate) {
+    Widget contentPage(int index, String heartRate, int debugAngkaLokal) {
       switch (index) {
         case 1:
           return const HomeMap();
@@ -123,6 +125,7 @@ class _HomePageState extends State<HomePage> {
             nama: widget.bluetoothDevice.name,
             id: widget.bluetoothDevice.id.toString(),
             listStream: heartRate,
+            debugAngka: debugAngkaLokal.toString(),
           );
 
         case 3:
@@ -132,6 +135,7 @@ class _HomePageState extends State<HomePage> {
             nama: widget.bluetoothDevice.name,
             id: widget.bluetoothDevice.id.toString(),
             listStream: heartRate,
+            debugAngka: debugAngkaLokal.toString(),
           );
       }
     }
@@ -145,6 +149,14 @@ class _HomePageState extends State<HomePage> {
       return cNavBarText;
     }
 
+    listStream?.listen(
+      (event) {
+        debugAngka += 1;
+
+        print('masukss $debugAngka');
+      },
+    );
+
     print(
         'namanya${widget.bluetoothDevice.name} : ${widget.bluetoothDevice.id}');
     return StreamBuilder<BluetoothState>(
@@ -154,77 +166,128 @@ class _HomePageState extends State<HomePage> {
         final state = snapshot.data;
         if (state == BluetoothState.on) {
           return Scaffold(
-            body: Stack(
-              children: [
-                Image.asset('assets/images/headerhome.png'),
-                SafeArea(
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: BlocConsumer<AuthCubit, AuthState>(
-                      listener: (context, state) {
-                        if (state is AuthFailed) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(state.error),
-                              backgroundColor: cRedColor,
-                            ),
-                          );
-                        } else if (state is AuthInitial) {
-                          context.read<BottompageCubit>().setPage(2);
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, LoginPage.nameRoute, (route) => false);
-                        }
-                      },
-                      builder: (context, state) {
-                        if (state is AuthLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        return IconButton(
-                          onPressed: () {
-                            context.read<AuthCubit>().signOut();
-                          },
-                          icon: const Icon(
-                            Icons.logout_outlined,
-                            color: cPurpleColor,
+            body: !isCorrect
+                ? Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: cPurpleColor,
+                        child: Center(
+                          child: Text(
+                            'No Heart Rate Service',
+                            style: cTextButtonWhite,
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                SafeArea(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return FindDevicesScreen();
-                          },
-                        ));
-                      },
-                      icon: StreamBuilder(
-                        stream: widget.bluetoothDevice.state,
-                        initialData: BluetoothDeviceState.connecting,
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          return snapshot.data == BluetoothDeviceState.connected
-                              ? const Icon(
-                                  Icons.bluetooth_connected,
-                                  color: cPurpleColor,
-                                )
-                              : const Icon(
-                                  Icons.bluetooth_disabled,
-                                  color: cPurpleColor,
-                                );
-                        },
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                /*SafeArea(
+                      SafeArea(
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return const FindDevicesScreen();
+                                },
+                              ));
+                            },
+                            icon: StreamBuilder(
+                              stream: widget.bluetoothDevice.state,
+                              initialData: BluetoothDeviceState.connecting,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                return snapshot.data ==
+                                        BluetoothDeviceState.connected
+                                    ? const Icon( 
+                                        Icons.bluetooth_connected,
+                                        color: cWhiteColor,
+                                      )
+                                    : const Icon(
+                                        Icons.bluetooth_disabled,
+                                        color: cWhiteColor,
+                                      );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      Image.asset('assets/images/headerhome.png'),
+                      SafeArea(
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: BlocConsumer<AuthCubit, AuthState>(
+                            listener: (context, state) {
+                              if (state is AuthFailed) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(state.error),
+                                    backgroundColor: cRedColor,
+                                  ),
+                                );
+                              } else if (state is AuthInitial) {
+                                context.read<BottompageCubit>().setPage(2);
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  LoginPage.nameRoute,
+                                  (route) => false,
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state is AuthLoading) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return IconButton(
+                                onPressed: () {
+                                  context.read<AuthCubit>().signOut();
+                                },
+                                icon: const Icon(
+                                  Icons.logout_outlined,
+                                  color: cPurpleColor,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      SafeArea(
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return const FindDevicesScreen();
+                                },
+                              ));
+                            },
+                            icon: StreamBuilder(
+                              stream: widget.bluetoothDevice.state,
+                              initialData: BluetoothDeviceState.connecting,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                return snapshot.data ==
+                                        BluetoothDeviceState.connected
+                                    ? const Icon(
+                                        Icons.bluetooth_connected,
+                                        color: cPurpleColor,
+                                      )
+                                    : const Icon(
+                                        Icons.bluetooth_disabled,
+                                        color: cPurpleColor,
+                                      );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      /*SafeArea(
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: StreamBuilder<List<int>>(
@@ -246,84 +309,86 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),*/
 
-                //
-                //
-                BlocBuilder<BottompageCubit, int>(
-                  builder: (context, state) {
-                    return StreamBuilder<List<int>>(
-                      stream: listStream,
-                      initialData: [],
-                      builder: (context, snapshot) {
-                        return snapshot.data!.length < 2
-                            ? contentPage(state, 'loading')
-                            : contentPage(state, snapshot.data![1].toString());
-                      },
-                    );
-                  },
-                ),
-
-                //
-                //
-                //! bottom nav bar
-                BlocBuilder<BottompageCubit, int>(
-                  builder: (context, state) {
-                    return Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ClipRRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(
-                            sigmaX: 5,
-                            sigmaY: 5,
-                          ),
-                          child: Container(
-                            height: 105,
-                            alignment: Alignment.topCenter,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
-                            width: double.infinity,
-                            color: state == 1
-                                ? const Color(0xffF4F3FF).withOpacity(0.8)
-                                : const Color(0xffF4F3FF),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    bloc.setPage(1);
-                                  },
-                                  child: Text(
-                                    'Map',
-                                    style: navBarColor(1, state),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    bloc.setPage(2);
-                                  },
-                                  child: Text(
-                                    'Utama',
-                                    style: navBarColor(2, state),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    bloc.setPage(3);
-                                  },
-                                  child: Text(
-                                    'Solusi',
-                                    style: navBarColor(3, state),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      //
+                      //
+                      BlocBuilder<BottompageCubit, int>(
+                        builder: (context, state) {
+                          return StreamBuilder<List<int>>(
+                            stream: listStream,
+                            initialData: const [],
+                            builder: (context, snapshot) {
+                              return snapshot.data!.length < 2
+                                  ? contentPage(state, 'loading', debugAngka)
+                                  : contentPage(state,
+                                      snapshot.data![1].toString(), debugAngka);
+                            },
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ],
-            ),
+
+                      //
+                      //
+                      //! bottom nav bar
+                      BlocBuilder<BottompageCubit, int>(
+                        builder: (context, state) {
+                          return Align(
+                            alignment: Alignment.bottomCenter,
+                            child: ClipRRect(
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                  sigmaX: 5,
+                                  sigmaY: 5,
+                                ),
+                                child: Container(
+                                  height: 105,
+                                  alignment: Alignment.topCenter,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 15),
+                                  width: double.infinity,
+                                  color: state == 1
+                                      ? const Color(0xffF4F3FF).withOpacity(0.8)
+                                      : const Color(0xffF4F3FF),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          bloc.setPage(1);
+                                        },
+                                        child: Text(
+                                          'Map',
+                                          style: navBarColor(1, state),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          bloc.setPage(2);
+                                        },
+                                        child: Text(
+                                          'Utama',
+                                          style: navBarColor(2, state),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          bloc.setPage(3);
+                                        },
+                                        child: Text(
+                                          'Solusi',
+                                          style: navBarColor(3, state),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
           );
         }
         return BluetoothOffScreen(
@@ -438,7 +503,7 @@ class FindDevicesScreen extends StatelessWidget {
               //? kalau sedang melakukan scan, memanggil fungsi stopScan untuk menghentikan scan, mengubah snapshot dari true menjadi false
               onPressed: () => FlutterBluePlus.instance.stopScan(),
               backgroundColor: Colors.red,
-              child: Icon(Icons.stop),
+              child: const Icon(Icons.stop),
             );
             //? kalau snapshot false, maka akan melakukan scanning, ketika melakukan startScan maka snpshot akan berubah menjadi true
           } else {

@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/gen/flutterblueplus.pbserver.dart';
 // import 'package:flutter_blue_plus/gen/flutterblueplus.pbserver.dart';
 
 import '../../shared/theme.dart';
@@ -12,12 +10,14 @@ class HomeUtama extends StatefulWidget {
       {required this.nama,
       required this.id,
       required this.listStream,
+      required this.debugAngka,
       super.key});
   final String nama;
   final String id;
   // final List<BluetoothService> services;
   // final Stream<List<int>>? listStream;
   final String listStream;
+  final String debugAngka;
 
   @override
   State<HomeUtama> createState() => _HomeUtamaState();
@@ -87,7 +87,7 @@ class _HomeUtamaState extends State<HomeUtama> {
             ),
           ),
           Text(
-            '${widget.id}',
+            widget.id,
             style: cNavBarText.copyWith(
               fontSize: 10,
               color: cPurpleDarkColor,
@@ -177,7 +177,7 @@ class _HomeUtamaState extends State<HomeUtama> {
                   ),*/
                 ],
               ),
-              Row(
+              /*Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(
@@ -195,7 +195,7 @@ class _HomeUtamaState extends State<HomeUtama> {
                     ),
                   ),
                 ],
-              )
+              )*/
             ],
           ),
           //
@@ -214,6 +214,7 @@ class _HomeUtamaState extends State<HomeUtama> {
               color: cPurpleDarkColor,
             ),
           ),
+          Text(widget.debugAngka),
           /*ElevatedButton(
             onPressed: () {
               _sub.pause();

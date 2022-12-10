@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heart_oxygen_alarm/pages/homepage.dart';
@@ -184,11 +182,11 @@ class RegisterPage extends StatelessWidget {
                       text: TextSpan(
                         children: <TextSpan>[
                           TextSpan(
-                            text: "Sudah punya akun? Login Disini",
+                            text: 'Sudah punya akun? Login Disini',
                             style: cTextButtonBlack,
                           ),
                           TextSpan(
-                            text: " Login disini",
+                            text: ' Login disini',
                             style: cTextButtonBlack.copyWith(fontWeight: bold),
                           ),
                         ],

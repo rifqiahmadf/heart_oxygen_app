@@ -38,7 +38,7 @@ TextStyle cTextButtonWhite = GoogleFonts.poppins(
 );
 
 TextStyle cNavBarText = GoogleFonts.poppins(
-  color: Color(0xffA4A2A8),
+  color: const Color(0xffA4A2A8),
   fontSize: 18,
   fontWeight: bold,
 );

@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           LoginPage.nameRoute: (context) => LoginPage(),
           RegisterPage.nameRoute: (context) => RegisterPage(),
           // HomePage.nameRoute: (context) => HomePage(),
-          FindDevicesScreen.nameRoute: (context) => FindDevicesScreen(),
+          FindDevicesScreen.nameRoute: (context) => const FindDevicesScreen(),
         },
       ),
     );
