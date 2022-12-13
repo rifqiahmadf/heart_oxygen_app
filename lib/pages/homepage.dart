@@ -42,12 +42,12 @@ class _HomePageState extends State<HomePage> {
     //checking each services provided by device
     print('masuk discover 1');
     for (var service in services) {
-      if (service.uuid.toString().toUpperCase().substring(4, 8) == 'FD92') {
+      if (service.uuid.toString().toUpperCase().substring(4, 8) == '180D') {
         //FD92 // 180D
         print('masuk discover 2 : ${service.uuid.toString()}');
         for (final characteristic in service.characteristics) {
           if (characteristic.uuid.toString().toUpperCase().substring(4, 8) ==
-              'EB22') {
+              '2A37') {
             //EB22 //2A37
             isCorrect = true;
             print('masuk discover 3 : ${characteristic.uuid.toString()}');
