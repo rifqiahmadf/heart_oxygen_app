@@ -28,7 +28,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Stream<List<int>>? listStream;
+  //! Fix Bug Read 1 : hapus listStream
+  // Stream<List<int>>? listStream;
   BluetoothCharacteristic? c;
   int debugAngka = 0;
   bool isCorrect = false;
@@ -41,35 +42,30 @@ class _HomePageState extends State<HomePage> {
     //checking each services provided by device
     print('masuk discover 1');
     for (var service in services) {
-      if (service.uuid.toString().toUpperCase().substring(4, 8) == '180D') {
-          //FD92
-          print('masuk discover 2 : ${service.uuid.toString()}');
-          for (var characteristic in service.characteristics) {
-            if (characteristic.uuid
-                      .toString()
-                      .toUpperCase()
-                      .substring(4, 8) ==
-                  '2A37') {
-                //EB22
-                isCorrect = true;
-                print('masuk discover 3 : ${characteristic.uuid.toString()}');
-                //Updating characteristic to perform write operation.
-                // c = characteristic;
+      if (service.uuid.toString().toUpperCase().substring(4, 8) == 'FD92') {
+        //FD92 // 180D
+        print('masuk discover 2 : ${service.uuid.toString()}');
+        for (final characteristic in service.characteristics) {
+          if (characteristic.uuid.toString().toUpperCase().substring(4, 8) ==
+              'EB22') {
+            //EB22 //2A37
+            isCorrect = true;
+            print('masuk discover 3 : ${characteristic.uuid.toString()}');
+            //Updating characteristic to perform write operation.
+            // c = characteristic;
 
-                await characteristic
-                    .setNotifyValue(!characteristic.isNotifying);
-                await characteristic.read();
-                setState(() {
-                  listStream = characteristic.value.asBroadcastStream();
-                  c = characteristic;
-                });
+            await characteristic.setNotifyValue(!characteristic.isNotifying);
+            await characteristic.read();
+            setState(() {
+              //! Fix Bug Read 1.2 : hapus listStream
+              // listStream = characteristic.value.asBroadcastStream();
+              c = characteristic;
+            });
 
-                // characteristic.read();
-              }
-            
+            // characteristic.read();
           }
         }
-      
+      }
     }
   }
 
@@ -149,13 +145,14 @@ class _HomePageState extends State<HomePage> {
       return cNavBarText;
     }
 
-    listStream?.listen(
+    //? buat debugging aja gapenting
+    /*listStream?.listen(
       (event) {
         debugAngka += 1;
 
         print('masukss $debugAngka');
       },
-    );
+    );*/
 
     print(
         'namanya${widget.bluetoothDevice.name} : ${widget.bluetoothDevice.id}');
@@ -198,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                                   AsyncSnapshot snapshot) {
                                 return snapshot.data ==
                                         BluetoothDeviceState.connected
-                                    ? const Icon( 
+                                    ? const Icon(
                                         Icons.bluetooth_connected,
                                         color: cWhiteColor,
                                       )
@@ -313,8 +310,9 @@ class _HomePageState extends State<HomePage> {
                       //
                       BlocBuilder<BottompageCubit, int>(
                         builder: (context, state) {
+                          //! Fix Bug Read 1.2 : get stream directly from c.value, not liststream anymore
                           return StreamBuilder<List<int>>(
-                            stream: listStream,
+                            stream: c?.value,
                             initialData: const [],
                             builder: (context, snapshot) {
                               return snapshot.data!.length < 2
@@ -443,6 +441,8 @@ class FindDevicesScreen extends StatelessWidget {
                                   child: const Text('OPEN'),
                                   onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) {
+                                      d.disconnect();
+                                      d.connect();
                                       return HomePage(
                                         bluetoothDevice: d,
                                       );
@@ -471,16 +471,19 @@ class FindDevicesScreen extends StatelessWidget {
                         (r) => ScanResultTile(
                           result: r,
                           //! Bluetooth : 5.6.7 voidcallback ontap akan menampilkan halaman DeviceScreen yang kita connect
-                          onTap: () => Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            //! Bluetooth : 5.6.8 Connect ke device menggunakan method result.device.connect()
-                            r.device.disconnect();
-                            r.device.connect();
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                //! Bluetooth : 5.6.8 Connect ke device menggunakan method result.device.connect()
+                                r.device.disconnect();
+                                r.device.connect();
 
-                            return HomePage(
-                              bluetoothDevice: r.device,
-                            );
-                          })),
+                                return HomePage(
+                                  bluetoothDevice: r.device,
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       )
                       .toList(),
